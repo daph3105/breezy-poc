@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Breezy Admin Panel POC</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="container">
+    <h1>Breezy Admin Panel POC</h1>
+
+    <!-- Contact Creation Form -->
+    <section>
+      <h2>Create Contact</h2>
+      <form id="contact-form">
+        <label for="firstname">First Name:</label>
+        <input type="text" id="firstname" name="firstname" required>
+
+        <label for="lastname">Last Name:</label>
+        <input type="text" id="lastname" name="lastname" required>
+
+        <label for="email">Email:</label>
+        <input type="email" id="email" name="email" required>
+
+        <label for="phone">Phone:</label>
+        <input type="text" id="phone" name="phone">
+
+        <label for="address">Address:</label>
+        <input type="text" id="address" name="address">
+
+        <button type="submit">Create Contact</button>
+        <div id="form-status" class="status"></div>
+      </form>
+    </section>
+
+    <!-- Contacts Table -->
+    <section>
+      <h2>Contacts</h2>
+      <div id="status" class="status">Loading contacts...</div>
+      <table id="contacts-table">
+        <thead>
+          <tr>
+            <th>First Name</th>
+            <th>Last Name</th>
+            <th>Email</th>
+            <th>Job Title</th>
+            <th>Company</th>
+            <th>Subscriptions</th>
+            <th>AI Insights</th>
+          </tr>
+        </thead>
+        <tbody id="contacts-body"></tbody>
+      </table>
+    </section>
+  </div>
+
+  <!-- Deals Modal -->
+  <div id="deals-modal" class="modal" style="display:none;">
+    <div class="modal-content">
+      <span id="close-modal" class="close">&times;</span>
+      <h3>Subscriptions (Deals)</h3>
+      <table id="modal-deals-table">
+        <thead>
+          <tr>
+            <th>Deal Name</th>
+            <th>Amount</th>
+            <th>Stage</th>
+          </tr>
+        </thead>
+        <tbody id="modal-deals-body"></tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- Create Deal Modal -->
+  <div id="create-deal-modal" class="modal" style="display:none;">
+    <div class="modal-content">
+      <span id="close-create-deal" class="close">&times;</span>
+      <h3>Create Deal</h3>
+      <form id="create-deal-form">
+        <input type="hidden" id="create-contact-id" name="contactId">
+
+        <label for="create-dealname">Deal Name:</label>
+        <input type="text" id="create-dealname" name="dealname" required>
+
+        <label for="create-amount">Amount:</label>
+        <input type="number" id="create-amount" name="amount" required>
+
+        <label for="create-dealstage">Deal Stage:</label>
+        <input
+          type="text"
+          id="create-dealstage"
+          name="dealstage"
+          value="closedwon"
+          readonly
+        >
+
+        <button type="submit">Create Deal</button>
+        <div id="create-deal-status" class="status"></div>
+      </form>
+    </div>
+  </div>
+
+  <!-- AI Insights Modal -->
+  <div id="ai-modal" class="modal" style="display:none;">
+    <div class="modal-content">
+      <span id="close-ai-modal" class="close">&times;</span>
+      <h3>AI Customer Insights</h3>
+      <div id="ai-modal-body" class="ai-modal-body">
+        <!-- AI text will be injected here -->
+      </div>
+    </div>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>

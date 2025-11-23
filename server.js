@@ -45,7 +45,7 @@ app.get('/api/contacts', async (req, res) => {
         },
         params: {
           limit: 50,
-          properties: 'firstname,lastname,email,phone,address'
+          properties: 'firstname,lastname,email,jobtitle,company,createdate'
         }
       }
     );
@@ -190,6 +190,144 @@ app.get('/api/contacts/:contactId/deals', async (req, res) => {
       error: 'Failed to fetch deals for contact',
       details: error.response?.data || error.message
     });
+  }
+});
+
+// AI Insight Route (Breezy-specific) 
+app.post('/api/insights', async (req, res) => {
+  const { contact, deals } = req.body;
+
+  // Basic validation
+  if (!contact) {
+    return res.status(400).json({ error: "Missing 'contact' in request body." });
+  }
+  if (!Array.isArray(deals)) {
+    return res.status(400).json({ error: "Missing or invalid 'deals' array in request body." });
+  }
+  if (!process.env.GEMINI_API_KEY) {
+    return res.status(500).json({ error: "AI is not configured. Please set GEMINI_API_KEY in .env." });
+  }
+
+  try {
+    const { GoogleGenAI } = await import('@google/genai');
+
+    const ai = new GoogleGenAI({
+      apiKey: process.env.GEMINI_API_KEY,
+    });
+
+    const safeDeals = deals.slice(0, 50);
+
+    const prompt = `
+You are an AI assistant for Breezy, a smart home technology company that sells:
+
+- Smart thermostats (hardware) via e-commerce
+- A companion SaaS subscription “Breezy Premium” that includes:
+  - AI climate optimization
+  - Energy analytics
+  - Remote access & scheduling
+  - Smart home integrations
+
+Pricing:
+- Hardware: $299 per thermostat
+- Subscription: $9.99 monthly or $99 annually
+- Each hardware purchase includes a 30-day free trial of Breezy Premium.
+
+---------------------------------------------------
+DATA MODEL FOR THIS PROOF OF CONCEPT
+---------------------------------------------------
+
+In HubSpot, Breezy represents customer activity as DEALS in two separate pipelines:
+
+1. Hardware pipeline
+   - Represents thermostat purchases
+   - A closed-won deal = completed thermostat sale
+   - Multiple closed-won hardware deals = multiple thermostats owned
+   - Deal names may include pack/quantity (e.g. "1 pack", "3 pack").
+
+2. Subscriptions pipeline
+   - Represents the Breezy Premium subscription lifecycle
+   - Stages typically include:
+       - Trial Started
+       - Trial Active
+       - Trial Ending Soon
+       - Converted – Monthly
+       - Converted – Annual
+       - At Risk / Payment Issue
+       - Cancelled / Churned
+   - Deals here represent:
+       - free trials,
+       - subscription activations,
+       - renewals,
+       - cancellations or churn.
+
+Each deal you receive has:
+- dealname
+- dealstage
+- amount
+- pipeline (indicating which pipeline it belongs to)
+- createdate
+- closedate
+
+Interpretation guidance:
+- Treat deals in the hardware pipeline as thermostat purchases.
+- Treat deals in the subscriptions pipeline as Breezy Premium subscription events.
+- If a customer has hardware but no subscription deals → likely used free trial only and never converted.
+- Use closedate and createdate to infer timing (e.g., mid trial, post trial, renewal, churn).
+
+---------------------------------------------------
+YOUR TASK
+---------------------------------------------------
+
+Using ONLY the contact and deals data provided, analyze this specific customer and produce:
+
+1. Customer Journey Summary:
+   - 2–3 sentences describing:
+     - where they are in their Breezy journey,
+     - approximately how many thermostats they own,
+     - whether they appear to be on trial, converted, renewed, or churned.
+
+2. Subscription Funnel Status:
+   - Status: choose exactly ONE of:
+     - On free trial
+     - Converted to paid monthly
+     - Converted to paid annual
+     - Renewal in progress
+     - Cancelled subscription
+     - Trial expired — not converted
+     - No subscription started
+   - Reason: briefly explain which deals (pipelines/stages) led you to that conclusion.
+
+3. Risk / Opportunity:
+   - Risk Level: Low / Medium / High
+   - Explanation: 1–2 sentences
+   - Mention any obvious expansion/upsell opportunities:
+     - more thermostats,
+     - upgrade to annual,
+     - reactivation campaigns, etc.
+
+4. Recommended Campaigns:
+   - Propose 3 targeted campaign ideas. For each:
+     - Campaign Title
+     - 1–2 sentence Focus
+     - Example subject line
+
+---------------------------------------------------
+Contact (JSON):
+${JSON.stringify(contact, null, 2)}
+
+Deals (JSON):
+${JSON.stringify(safeDeals, null, 2)}
+    `.trim();
+    const response = await ai.models.generateContent({
+      model: "gemini-2.0-flash",
+      contents: prompt,
+    });
+
+    const text = response.text || "No insights generated.";
+    res.json({ insight: text });
+  } catch (error) {
+    console.error('Error generating AI insight:', error);
+    res.status(500).json({ error: 'AI insight generation failed' });
   }
 });
 
