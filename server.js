@@ -11,8 +11,8 @@ const PORT = 3001;
 app.use(cors());
 app.use(express.json());
 
-// Serve static files from public directory (for easy frontend development)
-app.use(express.static(path.join(__dirname, 'public')));
+// Serve static files from admin-panel directory (for easy frontend development)
+app.use(express.static(path.join(__dirname, 'admin-panel')));
 
 // HubSpot API configuration
 const HUBSPOT_API_BASE = 'https://api.hubapi.com';
@@ -336,7 +336,7 @@ const server = app.listen(PORT, () => {
   console.log('\n✅ Server running successfully!');
   console.log(`🌐 API available at: http://localhost:${PORT}`);
   console.log(`📋 Health check: http://localhost:${PORT}/health`);
-  console.log(`📁 Static files served from: /public`);
+  console.log(`📁 Static files served from: /admin-panel`);
   console.log('\n💡 Using hot-reload? Run: npm run dev');
   console.log('🛑 To stop server: Press Ctrl+C\n');
 });
