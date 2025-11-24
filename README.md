@@ -41,7 +41,8 @@ A. Setup Instructions
 
 Create a .env file in the project root:
 
-`   HUBSPOT_ACCESS_TOKEN=your_hubspot_private_app_token  GEMINI_API_KEY=your_google_genai_api_key   `
+`HUBSPOT_ACCESS_TOKEN=your_hubspot_private_app_token`  
+`GEMINI_API_KEY=your_google_genai_api_key   `
 
 ### 4\. Start the Server
 
