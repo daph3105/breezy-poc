@@ -138,6 +138,9 @@ I use Line Items and Products only for hardware, so Breezy can report on thermos
 
 Finally, key rollup fields on the Contact (subscription status, latest hardware purchase date, latest subscription start date, trial end date, hardware units owned) summarize what’s happening across Deals and the Subscription object so marketing and sales can easily segment, trigger workflows, and run campaigns directly from the contact record.
 
+![Alt text](ERD-Breezy.png)
+
+
 E. AI Feature Explanation
 -------------------------
 
