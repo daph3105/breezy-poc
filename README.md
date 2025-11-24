@@ -1,7 +1,7 @@
 Breezy Admin Panel – HubSpot Integration Proof of Concept
 =========================================================
 
-This project is a Node.js backend and lightweight frontend demonstrating how Breezy, a smart HVAC technology company, could sync customer data, thermostat purchases, and subscription activity into HubSpot. The proof of concept also includes an AI-powered insights feature using Google Gemini to analyze customer behavior and provide recommendations based on synced CRM data.
+This project demonstrates how Breezy, a smart HVAC technology company, could sync customer data, thermostat purchases, and subscription activity into HubSpot. The proof of concept also includes an AI-powered insights feature using Google Gemini to analyze customer behavior and provide recommendations based on synced CRM data.
 
 A. Setup Instructions
 ---------------------
