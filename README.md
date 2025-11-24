@@ -1,397 +1,297 @@
-# HubSpot Integration Backend - Breezy Technical Assessment
+Breezy Admin Panel – HubSpot Integration Proof of Concept
+=========================================================
+
+This project is a Node.js backend and lightweight frontend demonstrating how Breezy, a smart HVAC technology company, could sync customer data, thermostat purchases, and subscription activity into HubSpot. The proof of concept also includes an AI-powered insights feature using Google Gemini to analyze customer behavior and provide recommendations based on synced CRM data.
 
-This is a backend server for the HubSpot Solutions Architect Technical Assessment. It provides a proxy layer between your frontend application and the HubSpot CRM API.
+A. Setup Instructions
+---------------------
 
-## Overview
+### 1\. Install Dependencies
 
-This Express.js server handles authentication and proxies requests to the HubSpot API. You'll build a frontend application that calls these endpoints to demonstrate how Breezy (a smart home technology company) would integrate their platform with HubSpot.
+Plain textANTLR4BashCC#CSSCoffeeScriptCMakeDartDjangoDockerEJSErlangGitGoGraphQLGroovyHTMLJavaJavaScriptJSONJSXKotlinLaTeXLessLuaMakefileMarkdownMATLABMarkupObjective-CPerlPHPPowerShell.propertiesProtocol BuffersPythonRRubySass (Sass)Sass (Scss)SchemeSQLShellSwiftSVGTSXTypeScriptWebAssemblyYAMLXML`   npm install express axios cors dotenv @google/genai   `
 
-## Prerequisites
+(If a package.json with these dependencies already exists, npm install alone is sufficient.)
 
-- Node.js (v14 or higher)
-- npm or yarn
-- A free HubSpot account
-- HubSpot Private App access token
+### 2\. Get Your HubSpot Access Token
 
-## Setup Instructions
+1.  Sign up for a [free HubSpot account](https://offers.hubspot.com/free-trial)
+    
+2.  Navigate to **Development** → **Legacy Apps**
+    
+3.  Click **Create a private app**
+    
+4.  Give it a name
+    
+5.  Go to the **Scopes** tab and enable:
+    
+    *   crm.objects.contacts.read
+        
+    *   crm.objects.contacts.write
+        
+    *   crm.objects.deals.read
+        
+    *   crm.objects.deals.write
+        
+6.  Click **Create app** and copy your access token
+    
 
-### 1. Install Dependencies
+3\. Generate a Gemini API key in Google AI Studio.
 
-```bash
-npm install
-```
+### 4\. Configure Environment Variables
 
-### 2. Get Your HubSpot Access Token
+Create a .env file in the project root:
 
-1. Sign up for a [free HubSpot account](https://offers.hubspot.com/free-trial)
-2. Navigate to **Development** → **Legacy Apps**
-3. Click **Create a private app**
-4. Give it a name (e.g., "SA Assessment App")
-5. Go to the **Scopes** tab and enable:
-   - `crm.objects.contacts.read`
-   - `crm.objects.contacts.write`
-   - `crm.objects.deals.read`
-   - `crm.objects.deals.write`
-6. Click **Create app** and copy your access token
+Plain textANTLR4BashCC#CSSCoffeeScriptCMakeDartDjangoDockerEJSErlangGitGoGraphQLGroovyHTMLJavaJavaScriptJSONJSXKotlinLaTeXLessLuaMakefileMarkdownMATLABMarkupObjective-CPerlPHPPowerShell.propertiesProtocol BuffersPythonRRubySass (Sass)Sass (Scss)SchemeSQLShellSwiftSVGTSXTypeScriptWebAssemblyYAMLXML`   HUBSPOT_ACCESS_TOKEN=your_hubspot_private_app_token  GEMINI_API_KEY=your_google_genai_api_key   `
 
-### 3. Configure Environment Variables
+### 4\. Start the Server
 
-```bash
-cp .env.example .env
-```
+From the project root:
 
-Edit `.env` and add your HubSpot token:
+Plain textANTLR4BashCC#CSSCoffeeScriptCMakeDartDjangoDockerEJSErlangGitGoGraphQLGroovyHTMLJavaJavaScriptJSONJSXKotlinLaTeXLessLuaMakefileMarkdownMATLABMarkupObjective-CPerlPHPPowerShell.propertiesProtocol BuffersPythonRRubySass (Sass)Sass (Scss)SchemeSQLShellSwiftSVGTSXTypeScriptWebAssemblyYAMLXML`   node server.js   `
 
-```
-HUBSPOT_ACCESS_TOKEN=pat-na1-your-token-here
-```
+The application will be available at:
 
-### 4. Start the Server
+Plain textANTLR4BashCC#CSSCoffeeScriptCMakeDartDjangoDockerEJSErlangGitGoGraphQLGroovyHTMLJavaJavaScriptJSONJSXKotlinLaTeXLessLuaMakefileMarkdownMATLABMarkupObjective-CPerlPHPPowerShell.propertiesProtocol BuffersPythonRRubySass (Sass)Sass (Scss)SchemeSQLShellSwiftSVGTSXTypeScriptWebAssemblyYAMLXML`   http://localhost:3001/   `
 
-**For development (with hot-reloading):**
+B. Project Overview
+-------------------
 
-```bash
-npm run dev
-```
+This proof of concept demonstrates how Breezy can unify its customer, hardware purchase, and SaaS subscription information inside HubSpot using a simple integration layer.
 
-This will automatically restart the server when you make changes to `server.js`.
+Testing the Integration Flow
 
-**For production:**
+1.  Open http://localhost:3001/ in your browser.
+    
+2.  Create a contact using the form at the top of the UI.
+    
+    1.  The contact is created in HubSpot immediately.
+        
+3.  Create a deal by selecting “Create” next to a contact.
+    
+    1.  The deal is associated with that contact and created in HubSpot
+        
+4.  View associated deals by clicking “View”.
+    
+    1.  A modal displays all deals tied to the selected contact.
+        
+5.  Generate AI insights by clicking “Generate”.
+    
+    1.  The backend gathers CRM data for the contact, sends it to Gemini, and displays the resulting analysis in a modal.
+        
 
-```bash
-npm start
-```
+C. AI Usage Documentation
+-------------------------
 
-You should see:
+### AI Tools Used
 
-```
-✅ Server running successfully!
-🌐 API available at: http://localhost:3001
-📋 Health check: http://localhost:3001/health
-📁 Static files served from: /public
-```
+*   ChatGPT (OpenAI) and Gemini– used throughout development for coding assistance, troubleshooting, architecture planning, and writing documentation.
+    
+*   Google Gemini (via @google/genai) – used inside the application itself as the AI engine that analyzes customer and subscription data to generate insights.
+    
 
-**To stop the server:** Press `Ctrl+C` (the server will gracefully shut down)
+### **What I Used AI for**
 
-### 5. Test the Server
+*   Helping me get started quickly after not coding for a while
+    
+*   Reviewing and debugging JavaScript and backend logic
+    
+*   Troubleshooting API errors and package configuration issues
+    
+*   Writing and refining copy (README content, prompts)
+    
+*   Helping me implement my first AI endpoint inside an app using Gemini
+    
 
-Open your browser or use curl:
+### **What I Learned**
 
-```bash
-curl http://localhost:3001/health
-```
+This was my first time integrating an AI model directly into an application, so I learned:
 
-Should return:
+*   How to use the Gemini API and the @google/genai SDK
+    
+*   How to structure prompts and pass CRM data to a model
+    
 
-```json
-{
-  "status": "Server is running",
-  "timestamp": "2025-11-10T..."
-}
-```
+### **Challenges**
 
-## API Endpoints
+*   Getting the Gemini integration working, mainly due to package version inconsistencies and incorrect model naming
+    
+*   Ensuring the AI prompt produced consistent, Breezy-specific insights
+    
 
-### Health Check
+D. HubSpot Data Architecture
+----------------------------
 
-**GET** `/health`
+I'm using a Subscription custom object because Breezy Premium is an ongoing service with its own lifecycle (trial, active, canceled, renewal dates, plan/sku, discounts) that needs a single, persistent “source of truth” independent of any one sale. 
 
-Check if the server is running.
+Deals alone close and don’t represent a living subscription. Deals are used in two pipelines:
 
-**Response:**
-
-```json
-{
-  "status": "Server is running",
-  "timestamp": "2025-11-10T12:00:00.000Z"
-}
-```
+*   Hardware Purchases
+    
+*   Breezy Premium Subscriptions
+    
 
----
-
-### Get Contacts
-
-**GET** `/api/contacts`
-
-Fetch all contacts from HubSpot (limited to 50).
-
-**Response:**
-
-```json
-{
-  "results": [
-    {
-      "id": "12345",
-      "properties": {
-        "firstname": "Alex",
-        "lastname": "Rivera",
-        "email": "alex@example.com",
-        "phone": "555-0123",
-        "address": "123 Main St"
-      }
-    }
-  ]
-}
-```
-
----
-
-### Create Contact
-
-**POST** `/api/contacts`
-
-Create a new contact in HubSpot.
-
-**Request Body:**
-
-```json
-{
-  "properties": {
-    "firstname": "Alex",
-    "lastname": "Rivera",
-    "email": "alex@example.com",
-    "phone": "555-0123",
-    "address": "123 Main St"
-  }
-}
-```
-
-**Response:**
-
-```json
-{
-  "id": "12345",
-  "properties": {
-    "firstname": "Alex",
-    "lastname": "Rivera",
-    "email": "alex@example.com",
-    ...
-  }
-}
-```
-
----
-
-### Get All Deals
-
-**GET** `/api/deals`
-
-Fetch all deals from HubSpot (limited to 50).
-
-**Response:**
-
-```json
-{
-  "results": [
-    {
-      "id": "67890",
-      "properties": {
-        "dealname": "Breezy Premium - Annual",
-        "amount": "99",
-        "dealstage": "closedwon"
-      }
-    }
-  ]
-}
-```
-
----
-
-### Create Deal
-
-**POST** `/api/deals`
-
-Create a new deal in HubSpot and associate it with a contact.
-
-**Request Body:**
-
-```json
-{
-  "dealProperties": {
-    "dealname": "Breezy Premium - Annual Subscription",
-    "amount": "99",
-    "dealstage": "closedwon"
-  },
-  "contactId": "12345"
-}
-```
-
-**Response:**
-
-```json
-{
-  "id": "67890",
-  "properties": {
-    "dealname": "Breezy Premium - Annual Subscription",
-    "amount": "99",
-    "dealstage": "closedwon"
-  }
-}
-```
-
----
-
-### Get Deals for Contact
-
-**GET** `/api/contacts/:contactId/deals`
-
-Get all deals associated with a specific contact.
-
-**Example:**
-
-```
-GET /api/contacts/12345/deals
-```
-
-**Response:**
-
-```json
-{
-  "results": [
-    {
-      "id": "67890",
-      "properties": {
-        "dealname": "Breezy Premium - Annual",
-        "amount": "99",
-        "dealstage": "closedwon"
-      }
-    }
-  ]
-}
-```
-
-## Testing with cURL
-
-### Create a contact:
-
-```bash
-curl -X POST http://localhost:3001/api/contacts \
-  -H "Content-Type: application/json" \
-  -d '{
-    "properties": {
-      "firstname": "Test",
-      "lastname": "Customer",
-      "email": "test@breezy.com"
-    }
-  }'
-```
-
-### Get all contacts:
+That way, they can focus on commercial events (hardware orders, new subscription conversions, and yearly renewals) and power revenue and pipeline reporting. 
 
-```bash
-curl http://localhost:3001/api/contacts
-```
-
-### Create a deal:
-
-```bash
-curl -X POST http://localhost:3001/api/deals \
-  -H "Content-Type: application/json" \
-  -d '{
-    "dealProperties": {
-      "dealname": "Breezy Premium - Monthly",
-      "amount": "9.99",
-      "dealstage": "closedwon"
-    },
-    "contactId": "12345"
-  }'
-```
-
-## Common Deal Stages
-
-For the Breezy use case, you can use these standard HubSpot deal stages:
-
-- `appointmentscheduled` - Trial started
-- `qualifiedtobuy` - Active trial user
-- `closedwon` - Converted to paid subscription
-- `closedlost` - Trial ended without conversion
-
-## Error Handling
-
-All endpoints return errors in this format:
-
-```json
-{
-  "error": "Human-readable error message",
-  "details": "Technical details from HubSpot API"
-}
-```
-
-Common errors:
-
-- **401 Unauthorized**: Check your `HUBSPOT_ACCESS_TOKEN` in `.env`
-- **403 Forbidden**: Your private app may not have the required scopes
-- **404 Not Found**: Contact or deal ID doesn't exist
-- **500 Internal Server Error**: Check console logs for details
-
-## Project Structure
-
-```
-2026-SA-Tech-Assessment/
-├── server.js           # Main Express server
-├── package.json        # Dependencies and scripts
-├── .env.example        # Example environment variables
-├── .gitignore         # Git ignore rules
-└── README.md          # This file
-```
-
-## Your Task
-
-Build a frontend application that:
-
-1. Displays contacts from `GET /api/contacts`
-2. Creates contacts via `POST /api/contacts`
-3. Creates deals via `POST /api/deals`
-4. Shows deals for each contact via `GET /api/contacts/:contactId/deals`
-5. Incorporates an AI feature using OpenAI or Anthropic API
-
-You can build your frontend in the `/public` folder or in a separate directory.
-
-## Troubleshooting
-
-### Port 3001 Already in Use
-
-If you see an error like `EADDRINUSE: address already in use ::1:3001`:
-
-**On Mac/Linux:**
-
-```bash
-# Find the process using port 3001
-lsof -ti:3001
-
-# Kill the process
-kill -9 $(lsof -ti:3001)
-```
-
-**On Windows:**
-
-```bash
-# Find the process
-netstat -ano | findstr :3001
-
-# Kill it (replace PID with the number from above)
-taskkill /PID <PID> /F
-```
-
-**Note:** The updated `server.js` now includes graceful shutdown, so pressing `Ctrl+C` should properly close the port.
-
-### Other Common Issues
-
-1. **401 Unauthorized**: Check that your `.env` file has a valid `HUBSPOT_ACCESS_TOKEN`
-2. **403 Forbidden**: Your HubSpot Private App may not have the required scopes
-3. **404 Not Found**: Contact or deal ID doesn't exist in your HubSpot portal
-4. **Module not found**: Run `npm install` to install dependencies
-5. Check the console logs for detailed error messages
-6. Test endpoints with curl to isolate frontend vs backend issues
-
-## Features
-
-- **Graceful Shutdown**: Server properly closes connections when stopped (Ctrl+C)
-- **Hot Reloading**: Use `npm run dev` for automatic restart on file changes
-- **Static File Serving**: Files in `/public` are automatically served
-- **Port 3001**: Runs on localhost:3001 by default
-- **CORS Enabled**: All origins allowed (development only)
-- **Token Validation**: Server won't start without valid HubSpot token
-- **Comprehensive Error Handling**: Detailed error messages for debugging
-
-Good luck with your assessment!
+A Deal can have 0–1 Subscriptions, because hardware deals will never be tied to a subscription, while subscription deals should link to exactly one Subscription record; conversely, a Subscription can have many Deals over time (initial new business + multiple renewal or expansion deals), which is how we track recurring ARR year over year. 
+
+I use Line Items and Products only for hardware, so Breezy can report on thermostat sales and quantities at the product level, but avoid duplicating subscription plan/price/discount data in both line items and the Subscription object. 
+
+Finally, key rollup fields on the Contact (subscription status, latest hardware purchase date, latest subscription start date, trial end date, hardware units owned) summarize what’s happening across Deals and the Subscription object so marketing and sales can easily segment, trigger workflows, and run campaigns directly from the contact record.
+
+E. AI Feature Explanation
+-------------------------
+
+### Description
+
+The AI feature takes a contact’s CRM data (contact properties, associated hardware deals, subscription deals, and lifecycle dates) and generates a summary that includes:
+
+*   Customer journey
+    
+*   Subscription Funnel Status
+    
+*   Risk / Opportunities
+    
+*   Recommended Campaigns
+    
+
+These insights are displayed to the user in a modal window.
+
+### Why This Feature Was Selected
+
+Breezy needs:
+
+*   Visibility into trial-to-paid conversions
+    
+*   Awareness of subscription lifecycle health
+    
+*   Early detection of churn risk
+    
+*   Actionable suggestions for marketing and customer success
+    
+
+AI provides all of these without requiring custom scoring engines or large rule sets.
+
+### How It Enhances the Integration
+
+AI interprets multiple data points together:
+
+*   Deal timelines
+    
+*   Subscription history
+    
+*   Purchase patterns
+    
+*   Contact data
+    
+
+This produces more meaningful insights than simple rule-based automation.
+
+### When to Use AI vs. Traditional Logic
+
+**AI is preferred for:**
+
+*   Recommendations
+    
+*   Behavioral summaries
+    
+*   Customer health scoring
+    
+*   Churn prediction
+    
+*   Pattern recognition
+    
+
+**Rules are preferred for:**
+
+*   Billing events
+    
+*   Deterministic workflow triggers
+    
+*   Data validation
+    
+*   Field updates and calculations
+    
+
+F. Design Decisions
+-------------------
+
+Technical choices made and why
+
+**1.Vanilla JavaScript for Simplicity and Speed**
+
+For this proof-of-concept, I intentionally chose **plain HTML, CSS, and vanilla JavaScript** instead of a framework like React or Vue.Reasons:
+
+*   **Speed & familiarity** — I haven’t coded in a while, and vanilla JS let me move quickly without setup or build tooling.
+    
+*   **Lightweight POC** — This project is intentionally small and focused on demonstrating the integration, not building a production UI.
+    
+*   **Transparent logic** — The HubSpot API calls and AI flow are easy to understand without framework abstractions.
+    
+
+**2\. Using Modals (“Popups”) for Interaction**
+
+I initially built the Contact and Deal form on the page, and later I switched to modals because:
+
+*   **Cleaner user experience** — Modals reduce scrolling and keep the main UI uncluttered.
+    
+*   **Better storytelling for a client demo** — It feels more like a polished admin tool, which helps Breezy visualize a real application.
+    
+*   **Easy to add and maintain** — Vanilla CSS + a small amount of JS is all that’s needed.
+    
+*   **Consistency** — I used the same modal pattern for:
+    
+    *   Viewing Deals
+        
+    *   Creating a Deal
+        
+    *   Viewing AI Insights
+        
+    *   This kept the UX predictable and the code easy to maintain.
+        
+
+**3\. Choosing Google Gemini for the AI Feature**
+
+Again, this was my first time using an AI model inside a real application, so I chose Gemini because:
+
+*   **The free tier is generous**, great for development/testing
+    
+*   **The @google/genai SDK is simple** and requires minimal setup
+    
+*   **The 1.5 Flash model is fast**, which matters for a real-time UI feature
+    
+*   Google models handle **structured data input** (JSON CRM data) especially well.
+    
+
+Assumptions made about Breezy's platform
+
+*   Breezy sells one primary hardware SKU (the thermostat), so no device-level custom object is needed.
+    
+*   Breezy Premium is a single subscription plan with simple annual pricing.
+    
+*   Each subscription has **one primary Contact** (subscription owner).
+    
+*   Hardware purchases and subscription conversions/renewals represent different business motions, justifying separate pipelines.
+    
+*   Breezy’s backend tracks subscription lifecycle events (trial start/end, renewal dates, cancellations).
+    
+*   Breezy’s platform will push order and subscription updates into HubSpot.
+    
+
+Improvements with more time
+
+*   Provide a more complete demonstration of Deal pipelines and stages, including clear definitions, entry/exit criteria, automation triggers, and lifecycle alignment for both B2C and B2B.
+    
+*   Integrate these expanded pipelines into the Gemini-powered AI feature, allowing it to make recommendations or generate insights based on pipeline stage, deal type, and revenue motion.
+    
+*   Enhance the AI prompt to leverage more context from pipelines, subscription lifecycle data, and hardware ownership to generate deeper insights.
+    
+*   Add workflow examples showing how Breezy could automate notifications, nurturing, or distributor handoffs based on pipeline activity.
+    
+
+Questions to ask before building a production version
+
+*   Will the integration be one-way or two-way? Does HubSpot only receive customer, hardware, and subscription data? Or do you expect HubSpot to send data back into Breezy’s platform?
+    
+*   What is the source of truth for subscription lifecycle events? Which system owns trial start/end, active status, cancellations, renewal dates, and pricing?
+    
+*   Do you support or expect to support multiple subscription tiers or add-on services now or in the future?
