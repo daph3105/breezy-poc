@@ -8,7 +8,7 @@ A. Setup Instructions
 
 ### 1\. Install Dependencies
 
-   npm install express axios cors dotenv @google/genai   `
+ `  npm install express axios cors dotenv @google/genai   `
 
 (If a package.json with these dependencies already exists, npm install alone is sufficient.)
 
